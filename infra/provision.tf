@@ -36,6 +36,6 @@ module "provision" {
 // locals calculated after the provision module is run, but before installation using launchpad
 locals {
   // combine each node-group & platform definition with the provisioned nodes
-  nodegroups = { for k, ngp in local.nodegroups_wplatform : k => merge({ "name" : k }, ngp, module.provision.nodegroups[k]) }
-  ingresses  = { for k, i in local.launchpad_ingresses : k => merge({ "name" : k }, i, module.provision.ingresses[k]) }
+  nodegroups = { for k, ngp in local.nodegroups_wplatform : k => merge(ngp, module.provision.nodegroups[k], { "name" : k }) }
+  ingresses  = { for k, i in local.launchpad_ingresses : k => merge(i, module.provision.ingresses[k], { "name" : k }) }
 }

@@ -5,23 +5,6 @@ aws = {
   region = "us-east-2"
 }
 
-launchpad = {
-  drain = false
-
-  mcr_version = "23.0"
-  mke_version = "3.7.3"
-  msr_version = ""
-
-  mke_connect = {
-    username = "admin"
-    password = ""
-    insecure = false
-  }
-
-  skip_create  = false
-  skip_destroy = true  // don't bother running launchpad reset
-}
-
 // configure the network stack
 network = {
   cidr                 = "172.31.0.0/16"
