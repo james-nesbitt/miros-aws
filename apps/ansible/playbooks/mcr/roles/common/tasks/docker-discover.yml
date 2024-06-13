@@ -1,0 +1,12 @@
+
+- name: Discover Docker version on all hosts
+  ansible.builtin.command: docker version --format json
+  register: version
+- name: Discover Docker info on all hosts
+  ansible.builtin.command: docker info --format json
+  register: info 
+
+- name: Set_Fact with Docker info and version
+  ansible.builtin.set_fact:
+    info: info.stdout|from_json
+    version: version.stdout|from_json

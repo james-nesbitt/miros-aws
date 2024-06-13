@@ -1,0 +1,13 @@
+- name: Create manager join token
+  delegate_to: ACon-0
+  ansible.builtin.command: docker swarm join-token -q manager
+  register: manager_join_token
+  changed_when: manager_join_token | length > 0
+
+- name: Check if swarm is enabled on node
+  ansible.builtin.command: docker info --format {% raw %}'{{ .Swarm.LocalNodeState }}'{% endraw %}
+  register: swarm_status
+
+- name: Join Manager
+  ansible.builtin.command: docker swarm join manager --token=""{{ manager_join_token.stdout }}
+  when: swarm_status.stdout == 'inactive'
