@@ -1,0 +1,2 @@
+- name: Docker Discovery
+  import_tasks: docker-discover.yml

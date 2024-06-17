@@ -1,0 +1,19 @@
+- name: Initial discovery
+  hosts: all
+  roles:
+  - common
+
+- name: Swarm initialize
+  hosts: ACon-0
+  roles:
+  - initialize
+
+- name: Swarm control-plane
+  hosts: manager
+  roles:
+  - control-plane
+
+- name: Swarm worker-plane
+  hosts: worker
+  roles:
+  - worker-plane

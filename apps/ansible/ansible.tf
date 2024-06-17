@@ -1,12 +1,11 @@
 
 locals {
-  unique_roles = [ for r in distinct([ for k, ng in local.nodegroups : ng.role ]) : { role: r, children: [ for ng in local.nodegroups : ng. name if ng.role == r ] } ]
+  unique_roles = [ for r in distinct([ for k, ng in local.nodegroups : ng.role ]) : { role: r, children: [ for ng in local.nodegroups : ng.name if ng.role == r ] } ]
 
   ansible_inventory = <<-EOT
-%{for ng in local.nodegroups~}
-# nodegroup:${ng.name}
-${ng.name}:
+all:
   hosts:
+%{for ng in local.nodegroups~}
 %{for n in ng.nodes}
 %{~if ng.connection == "ssh"~}
     ${n.id}:
@@ -16,16 +15,31 @@ ${ng.name}:
       ansible_host: ${n.public_ip}
 %{~endif}
 %{endfor}
-%{endfor}
-%{for r in local.unique_roles~}
-# role:${r.role}
-${r.role}:
+%{endfor~}
   children:
+%{for r in local.unique_roles~}
+    # role:${r.role}
+    ${r.role}:
+      hosts:
 %{for c in r.children~}
-    ${c}
+%{for n in local.nodegroups[c].nodes~}
+        ${n.id}:
+%{endfor~}
 %{endfor}
 %{endfor~}
-  EOT
+%{for ng in local.nodegroups~}
+    # nodegroup:${ng.name}
+    ${ng.name}:
+      hosts:
+%{for n in ng.nodes~}
+        ${n.id}:
+%{endfor}
+%{endfor~}
+
+  vars:
+    mke_version: 3.7.9
+
+EOT
 }
 
 output "ansible_inventory" {
@@ -36,5 +50,5 @@ output "ansible_inventory" {
 # Create Ansible inventory file
 resource "local_file" "ansible_inventory" {
   content  = local.ansible_inventory
-  filename = "hosts.yaml"
+  filename = "inventory/01_hosts.yaml"
 }

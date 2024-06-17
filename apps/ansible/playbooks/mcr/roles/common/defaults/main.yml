@@ -1,0 +1,3 @@
+docker_ee_url: "https://repos.mirantis.com"
+docker_ee_version: "23.0.9"
+mcr_channel: "stable"

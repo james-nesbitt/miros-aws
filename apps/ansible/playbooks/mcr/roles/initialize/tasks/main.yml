@@ -1,0 +1,7 @@
+- name: Check if swarm is enabled on leader
+  ansible.builtin.command: docker info --format {% raw %}'{{ .Swarm.LocalNodeState }}'{% endraw %}
+  register: leader_swarm_status
+
+- name: Swarm init on leader
+  ansible.builtin.command: docker swarm init
+  when: leader_swarm_status.stdout == 'inactive'
