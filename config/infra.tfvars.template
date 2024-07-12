@@ -23,7 +23,7 @@ nodegroups = {
     public      = true
     user_data   = ""
   },
-  "AWrk_Ubu22" = { // workers for A group
+  "AWrk" = { // workers for A group
     platform    = "mkex-8-mke-3.7"
     count       = 1
     type        = "c6a.xlarge"
