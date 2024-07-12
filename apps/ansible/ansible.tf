@@ -36,9 +36,6 @@ all:
 %{endfor}
 %{endfor~}
 
-  vars:
-    mke_version: 3.7.9
-
 EOT
 }
 
